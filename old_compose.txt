@@ -1,0 +1,123 @@
+
+services:
+  ubuntu1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UNIQUE_ID: "409a1dba1"
+    # ports:
+    #   - "8081:8081"
+    #   - "8082:8082"
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.2
+    volumes:
+      - /Users/karan/Documents/Uni Work/CSC409:/shared
+    container_name: ubuntu_container_1
+    restart: "unless-stopped"
+
+  ubuntu2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UNIQUE_ID: "409a1dba2"
+    # ports:
+    #   - "8081:8081"
+    #   - "8082:8082"
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.3
+    volumes:
+      - /Users/karan/Documents/Uni Work/CSC409:/shared
+    container_name: ubuntu_container_2
+    restart: "unless-stopped"
+
+  ubuntu3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UNIQUE_ID: "409a1dba3"
+    # ports:
+    #   - "8081:8081"
+    #   - "8082:8082"
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.4
+    volumes:
+      - /Users/karan/Documents/Uni Work/CSC409:/shared
+    container_name: ubuntu_container_3
+    restart: "unless-stopped"
+
+  ubuntu4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UNIQUE_ID: "409a1dba4"
+      # ports:
+      # - "8081:8081"
+      # - "8082:8082"
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.5
+    volumes:
+      - /Users/karan/Documents/Uni Work/CSC409:/shared
+    container_name: ubuntu_container_4
+    restart: "unless-stopped"
+
+  # visualizer:
+  #   image: alexellis2/visualizer-arm:latest
+  #   ports:
+  #     - "3000:8080"
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #   networks:
+  #     my_custom_network:
+  #       ipv4_address: 172.18.0.6
+  #   container_name: visualizer
+  #   restart: "on-failure"
+
+networks:
+  my_custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+==
+# Dockerfile
+FROM ubuntu:22.04
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    vim \
+    nano \
+    git \
+    lsof \
+    procps \
+    wget \
+    curl \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Java
+RUN mkdir -p /opt && \
+    wget https://download.oracle.com/java/22/archive/jdk-22.0.2_linux-aarch64_bin.tar.gz -O /tmp/openjdk.tar.gz && \
+    tar -xzf /tmp/openjdk.tar.gz -C /opt && \
+    rm /tmp/openjdk.tar.gz
+
+# Set environment variables for Java
+ENV JAVA_HOME="/opt/jdk-22.0.2"
+ENV PATH="/opt/jdk-22.0.2/bin:$PATH"
+
+
+# Create a unique directory and file in each container
+ARG UNIQUE_ID
+RUN mkdir -p /virtual/${UNIQUE_ID} && touch /virtual/${UNIQUE_ID}/database.db
+
+# Set entrypoint to keep the container running
+CMD ["tail", "-f", "/dev/null"]
+

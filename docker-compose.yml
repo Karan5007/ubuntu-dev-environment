@@ -1,0 +1,48 @@
+services:
+  ubuntu1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - shared_network
+    volumes:
+      - "/Users/karan/Documents/Uni Work/CSC409:/shared"
+    container_name: ubuntu_container_1
+    restart: "unless-stopped"
+
+  ubuntu2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - shared_network
+    volumes:
+      - "/Users/karan/Documents/Uni Work/CSC409:/shared"
+    container_name: ubuntu_container_2
+    restart: "unless-stopped"
+
+  ubuntu3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - shared_network
+    volumes:
+      - "/Users/karan/Documents/Uni Work/CSC409:/shared"
+    container_name: ubuntu_container_3
+    restart: "unless-stopped"
+
+  ubuntu4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - shared_network
+    volumes:
+      - "/Users/karan/Documents/Uni Work/CSC409:/shared"
+    container_name: ubuntu_container_4
+    restart: "unless-stopped"
+
+networks:
+  shared_network:
+    driver: bridge

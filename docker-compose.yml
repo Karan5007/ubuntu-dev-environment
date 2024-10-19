@@ -1,10 +1,12 @@
+
 services:
   ubuntu1:
     build:
       context: .
       dockerfile: Dockerfile
     networks:
-      - shared_network
+      shared_network:
+        ipv4_address: 172.20.0.2  # Fixed IP for ubuntu1
     volumes:
       - "/Users/karan/Documents/Uni Work/CSC409:/shared"
     container_name: ubuntu_container_1
@@ -15,7 +17,8 @@ services:
       context: .
       dockerfile: Dockerfile
     networks:
-      - shared_network
+      shared_network:
+        ipv4_address: 172.20.0.3  # Fixed IP for ubuntu2
     volumes:
       - "/Users/karan/Documents/Uni Work/CSC409:/shared"
     container_name: ubuntu_container_2
@@ -26,7 +29,8 @@ services:
       context: .
       dockerfile: Dockerfile
     networks:
-      - shared_network
+      shared_network:
+        ipv4_address: 172.20.0.4  # Fixed IP for ubuntu3
     volumes:
       - "/Users/karan/Documents/Uni Work/CSC409:/shared"
     container_name: ubuntu_container_3
@@ -37,7 +41,8 @@ services:
       context: .
       dockerfile: Dockerfile
     networks:
-      - shared_network
+      shared_network:
+        ipv4_address: 172.20.0.5  # Fixed IP for ubuntu4
     volumes:
       - "/Users/karan/Documents/Uni Work/CSC409:/shared"
     container_name: ubuntu_container_4
@@ -46,3 +51,6 @@ services:
 networks:
   shared_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16  # Custom subnet for the network
